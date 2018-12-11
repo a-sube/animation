@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="animation.css" />
+
+</head>
+
+<body>
+    <header>
+        <div id="canvas-container">
+            <canvas id="demo" height="300" width="300">
+            </canvas>
+        </div>
+    </header>
+    <main>
+    </main>
+    <footer>
+    </footer>
+</body>
+<!-- <script src="animation.js"></script> -->
+<script type="text/javascript">
+
+    function getRadian(degree) {
+        return (Math.PI / 180) * degree
+    }
+
+    function draw() {
+        let canvas = document.getElementById('demo');
+        let ctx, width, height, speed;
+
+        let speed_interval;
+
+        let circle_coords, 
+            circle_degrees, 
+            circle_x,
+            circle_y;
+
+        
+
+        if (canvas.getContext) {
+            ctx = canvas.getContext('2d');
+
+            width = canvas.width, 
+            height = canvas.height,
+            speed = 0.1;
+
+            // speed_interval = setInterval(() => {
+            //     if (speed > 0.05) speed -= 0.05;
+            //     else {
+            //         speed = 0;
+            //         clearInterval(speed_interval);
+            //     }
+            // }, 500);
+
+            circle_x = width / 2, 
+            circle_y = height / 2;
+            circle_degrees = [
+                [getRadian(0), getRadian(225)],
+                [getRadian(45), getRadian(225 + 45)],
+                [getRadian(90), getRadian(225 + 90)],
+                [getRadian(135), getRadian(225 + 135)]
+            ]
+
+            var raf =
+                window.requestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.msRequestAnimationFrame;
+            window.requestAnimationFrame = raf;
+        }
+
+
+
+
+
+        function animate_(ctx) {
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#0f0';
+            ctx.fillStyle = '#0f0';
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#0f0';
+            ctx.lineCap = 'round';
+            // if (!speed) ctx.lineWidth = 4;
+
+            for (var i = 0; i < 4; i++) {
+                ctx.beginPath();
+                ctx.arc(circle_x, circle_y, 75 + i * 10,
+                    circle_degrees[i][0], circle_degrees[i][1], true);
+                ctx.stroke();
+                ctx.closePath();
+            }
+
+            for (let i = 0; i < 4; i++) {
+                let x = circle_degrees[i];
+                if (x[0] === 360) x[0] = 0;
+                if (x[1] === x[0]) x[1] = getRadian(225);
+                if (i % 2 == 0) {
+                    x[0] -= speed;
+                    x[1] -= speed;
+                } else {
+                    x[0] += speed;
+                    x[1] += speed;
+                }
+            }
+
+            
+            requestAnimationFrame(() => {
+                animate_(ctx);
+            });
+        }
+
+        animate_(ctx);
+    }
+
+
+    window.addEventListener('load', (e) => {
+        draw();
+    });
+
+</script>
+
+</html>
