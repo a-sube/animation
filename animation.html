@@ -11,95 +11,255 @@
 </head>
 
 <body>
-    <header>
-        <div id="canvas-container">
-            <canvas id="demo" height="300" width="300">
-            </canvas>
-        </div>
-    </header>
-    <main>
-    </main>
-    <footer>
-    </footer>
-</body>
-<!-- <script src="animation.js"></script> -->
-<script type="text/javascript">
+        <div id="wrapper">
+        <canvas id="background-canvas" width="800" height="800">
 
-    function getRadian(degree) {
-        return (Math.PI / 180) * degree
+        </canvas>
+        <header>
+            <div id="canvas-container">
+                <canvas id="sweng-canvas" height="300" width="800"></canvas>
+                <canvas id="laser-canvas" height="300" width="800"></canvas>
+                <canvas id="images-canvas" height="300" width="300"></canvas>
+                <canvas id="circle-canvas" height="300" width="300"></canvas>
+            </div>
+            <div id="name-container">
+                <canvas id="name-canvas" height="100" width="500"></canvas>
+                <h1>Kairat Abylkasymov</h1>
+                <p style="display: none">software engineer</p>
+            </div>
+        </header>
+        <main>
+            <div style="display: none">
+                <img src="bugs_bunny-3x3.jpg">
+            </div>
+        </main>
+        <footer>
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                <i class="material-icons">add</i>
+            </button>
+        </footer>
+    </div>
+
+
+
+</body>
+<script type="text/javascript" src="vector.js"></script>
+<script type="text/javascript" src="particle.js"></script>
+<script type="text/javascript" src="text_coords.js"></script>
+<script type="text/javascript">
+let raf =
+        window.requestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.msRequestAnimationFrame;
+    window.requestAnimationFrame = raf;
+    let [start_image, image_started] = [false, false];
+    // helpers
+    const getRadian = (degree) => (Math.PI / 180) * degree
+
+    const getRandom = (n) => Math.floor(Math.random() * n) + 1;
+
+    // random integer between
+    const getRIB = (n, m) => Math.floor(Math.random() * (m - n)) + n;
+    // random float between
+    const getRFB = (n, m, f) => {
+        let r = parseFloat((Math.random() * (m - n) + n).toFixed(f));
+        if (!r) return getRFB(n, m, f);
+        return r;
     }
 
-    function draw() {
-        let canvas = document.getElementById('demo');
-        let ctx, width, height, speed;
+    // location vector
+    const LVector = (width, height) => new Vector(width, height);
+    // velocity vector
+    const VVector = (x, y) => new Vector(x, y);
+    // acceleration vector
+    const AVector = (x, y) => new Vector(x, y);
 
-        let speed_interval;
+    let w = 90;
 
-        let circle_coords, 
-            circle_degrees, 
-            circle_x,
-            circle_y;
 
-        
+    function draw_software_engineer() {
+        let canvas = document.getElementById('sweng-canvas');
+        let ctx = canvas.getContext('2d'),
+            width = canvas.width,
+            height = canvas.height;
 
-        if (canvas.getContext) {
-            ctx = canvas.getContext('2d');
+        let [ps_s, ps_o, ps_f, ps_t,
+            ps_w, ps_a, ps_r, ps_e,
+            ps_e_1, ps_n, ps_g, ps_i,
+            ps_n_1, ps_e_2, ps_e_3,
+            ps_r_1] = getTextCoords(width, height, ParticleSystem);
 
-            width = canvas.width, 
-            height = canvas.height,
-            speed = 0.1;
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            // ctx.globalCompositeOperation = 'destination-out';
+            // ctx.fillStyle = 'hsla(0, 0%, 0%, 0.9)';
+            // ctx.fillRect(0, 0, width, height);
+            // ctx.globalCompositeOperation = 'lighter';
+            ps_s.run(ctx);
+            if (ps_s.finished) ps_o.run(ctx);
+            if (ps_o.finished) ps_f.run(ctx);
+            if (ps_f.finished) ps_t.run(ctx);
+            if (ps_t.finished) ps_w.run(ctx);
+            if (ps_w.finished) ps_a.run(ctx);
+            if (ps_a.finished) ps_r.run(ctx);
+            if (ps_r.finished) ps_e.run(ctx);
 
-            // speed_interval = setInterval(() => {
-            //     if (speed > 0.05) speed -= 0.05;
-            //     else {
-            //         speed = 0;
-            //         clearInterval(speed_interval);
-            //     }
-            // }, 500);
+            if (ps_s.finished) ps_e_1.run(ctx);
+            if (ps_e_1.finished) ps_n.run(ctx);
+            if (ps_n.finished) ps_g.run(ctx);
+            if (ps_g.finished) ps_i.run(ctx);
+            if (ps_i.finished) ps_n_1.run(ctx);
+            if (ps_n_1.finished) ps_e_2.run(ctx);
+            if (ps_e_2.finished) ps_e_3.run(ctx);
+            if (ps_e_3.finished) ps_r_1.run(ctx);
 
-            circle_x = width / 2, 
-            circle_y = height / 2;
-            circle_degrees = [
-                [getRadian(0), getRadian(225)],
-                [getRadian(45), getRadian(225 + 45)],
-                [getRadian(90), getRadian(225 + 90)],
-                [getRadian(135), getRadian(225 + 135)]
-            ]
+            if (ps_e.finished) {
+                // draw_c();
+            } else requestAnimationFrame(animate);
+        }
+        animate();
+    }
 
-            var raf =
-                window.requestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.msRequestAnimationFrame;
-            window.requestAnimationFrame = raf;
+    function draw_lasers() {
+        let canvas = document.getElementById('laser-canvas');
+        let ctx = canvas.getContext('2d'),
+            width = canvas.width,
+            height = canvas.height;
+
+        let [ps_s, ps_o, ps_f, ps_t,
+            ps_w, ps_a, ps_r, ps_e,
+            ps_e_1, ps_n, ps_g, ps_i,
+            ps_n_1, ps_e_2, ps_e_3,
+            ps_r_1, ps_last_2] = getTextCoords(width, height, FireParticleSystem);
+
+        function lights_top_bottom(n = 0) {
+            let [x, y] = [0, height - 1];
+            let l = getRIB(n, 100);
+            let colors;
+            if (l > 95) {
+
+                let p = 5;
+                colors = [
+                    'rgba(110, 219, 231)',
+                    'rgba(217, 231, 110)',
+                    'rgba(231, 110, 201)',
+                    'rgba(255,255,255, 1)',
+                ]
+
+                for (let i = 3; i >= 0; i--) {
+                    ctx.beginPath();
+                    ctx.fillStyle = colors[i];
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.shadowBlur = 50;
+                    ctx.shadowColor = colors[i];
+                    ctx.fillRect(0, x - 5, width, p);
+                    ctx.fillRect(0, y + 3, width, p);
+                    ctx.closePath();
+                }
+
+            }
         }
 
 
+        function animate_laser_like() {
+            // ctx.clearRect(0, 0, width, height);
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'hsla(0, 0%, 0%, .3)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.globalCompositeOperation = 'lighter';
 
+            ps_s.run(ctx);
+            if (ps_s.finished) ps_o.run(ctx);
+            if (ps_o.finished) ps_f.run(ctx);
+            if (ps_f.finished) ps_t.run(ctx);
+            if (ps_t.finished) ps_w.run(ctx);
+            if (ps_w.finished) ps_a.run(ctx);
+            if (ps_a.finished) ps_r.run(ctx);
+            if (ps_r.finished) ps_e.run(ctx);
 
+            if (ps_s.finished) ps_e_1.run(ctx);
+            if (ps_e_1.finished) ps_n.run(ctx);
+            if (ps_n.finished) ps_g.run(ctx);
+            if (ps_g.finished) ps_i.run(ctx);
+            if (ps_i.finished) ps_n_1.run(ctx);
+            if (ps_n_1.finished) ps_e_2.run(ctx);
+            if (ps_e_2.finished) ps_e_3.run(ctx);
+            if (ps_e_3.finished) ps_r_1.run(ctx);
+            if (ps_r_1.finished)
+                ps_last_2.run(ctx);
+            if (!ps_last_2.at_point) {
+                requestAnimationFrame(animate_laser_like);
+                lights_top_bottom();
+            } else {
+                draw_circles();
+                // draw_images();
+            }
+        }
 
-        function animate_(ctx) {
+        animate_laser_like();
+    }
 
-            ctx.clearRect(0, 0, width, height);
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = '#0f0';
-            ctx.fillStyle = '#0f0';
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = '#0f0';
-            ctx.lineCap = 'round';
-            // if (!speed) ctx.lineWidth = 4;
+    function draw_circles() {
+        let canvas = document.getElementById('circle-canvas');
+        let ctx = canvas.getContext('2d');
+        let [width, height, speed] = [
+            canvas.width,
+            canvas.height,
+            0.04
+        ]
 
-            for (var i = 0; i < 4; i++) {
+        let speed_interval;
+
+        let circle_coords;
+        let circle_degrees = [
+            [getRadian(0), getRadian(225)],
+            [getRadian(getRandom(45)), getRadian(225 + 45)],
+            [getRadian(225), getRadian(90)],
+        ]
+        let [circle_x, circle_y] = [width / 2, height / 2];
+
+        let op = 1, r = 0;
+
+        function draw_circles_around_image() {
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'hsla(0, 0%, 0%, .3)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.globalCompositeOperation = 'lighter';
+
+            let colors = [
+                `rgba(255, 255, 255, ${op})`,
+                `rgba(246, 226, 126, ${op})`,
+                `rgba(246, 212, 126, ${op})`,
+                `rgba(246, 194, 126, ${op})`,
+                `rgba(246, 180, 126, ${op})`,
+                `rgba(246, 168, 126, ${op})`,
+                `rgba(246, 158, 126, ${op})`,
+            ]
+
+            ctx.save();
+            for (var i = 0; i < 3; i++) {
+                let n = getRandom(6);
+                let n_between = getRIB(75, 85);
+
+                ctx.lineWidth = 1;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.shadowBlur = 5;
+                ctx.strokeStyle = colors[n];
+                ctx.shadowColor = colors[n];
+                ctx.lineCap = 'round';
                 ctx.beginPath();
-                ctx.arc(circle_x, circle_y, 75 + i * 10,
+                ctx.arc(circle_x, circle_y, r + i * 10,
                     circle_degrees[i][0], circle_degrees[i][1], true);
                 ctx.stroke();
                 ctx.closePath();
             }
+            ctx.restore();
 
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 3; i++) {
                 let x = circle_degrees[i];
                 if (x[0] === 360) x[0] = 0;
                 if (x[1] === x[0]) x[1] = getRadian(225);
@@ -111,21 +271,170 @@
                     x[1] += speed;
                 }
             }
+            if (op > 0.15) op -= 0.01;
+            if (r < 75) r += 1;
+            else if (!start_image && !image_started) start_image = true;
 
-            
-            requestAnimationFrame(() => {
-                animate_(ctx);
-            });
+            if (start_image) draw_images();
+
+            requestAnimationFrame(draw_circles_around_image);
         }
-
-        animate_(ctx);
+        draw_circles_around_image();
     }
 
+    function draw_images() {
+        image_started = true;
+        start_image = false;
+        // display_name();
+        let canvas = document.getElementById('images-canvas');
+        let ctx, mid_x, mid_y, radius,
+            image_interval, index = -1;
+        let img_radius = 65;
+        if (canvas.getContext) {
+            ctx = canvas.getContext('2d');
+            width = canvas.width,
+                height = canvas.height,
+                mid_x = width / 2,
+                mid_y = height / 2,
+                radius = 65;
+        }
+
+        function getImageIndex(i) {
+            let r = [0, 0];
+            if (i === 0) return r;
+            if (i === 1) r[0] = 300;
+            if (i === 2) r[0] = 600;
+            if (i === 3) r[1] = 400;
+            if (i === 4) r = [300, 400];
+            if (i === 5) r = [600, 400];
+            if (i === 6) r = [0, 800];
+            if (i === 7) r = [300, 800];
+            if (i === 8) r = [600, 800];
+            return r;
+        }
+
+        let imageObj = new Image();
+        imageObj.src = document.images[0].src;
+
+        ctx.save();
+        ctx.fillStyle = 'transparent';
+        ctx.beginPath();
+        ctx.arc(mid_x, mid_y, img_radius, 0, Math.PI * 2, true);
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
+        imageObj.onload = function () {
+            image_interval = setInterval(() => {
+                index++;
+                if (index === 9) index = 0;
+
+                let [img_x, img_y] = getImageIndex(index);
+
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(mid_x, mid_y, img_radius, 0, Math.PI * 2, true);
+                ctx.fill();
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(imageObj, img_x, img_y, 300, 400, 90, 70, 120, 160);
+
+                ctx.beginPath();
+                ctx.arc(mid_x, mid_y, radius, 0, Math.PI * 2, true);
+                ctx.closePath();
+                ctx.clip();
+            }, 700)
+        };
+    }
+
+    function display_name() {
+        let div = document.getElementById('name-container');
+        div.classList.remove('visible');
+        div.classList.add('visible');
+        let canvas = document.getElementById('name-canvas');
+        let ctx = canvas.getContext('2d');
+        let [width, height] = [canvas.width, canvas.height]
+        let colors = [
+            `#E8776D`,
+            `#E88E6D`,
+            `#E88E6D`,
+            `#E8A46D`,
+            `#E8A46D`,
+            `#E8C16D`,
+            `#E8C16D`,
+            `#FFF`,
+            `#E8C16D`,
+            `#E8C16D`,
+            `#E8A46D`,
+            `#E8A46D`,
+            `#E88E6D`,
+            `#E88E6D`,
+            `#E8776D`,
+            `#E8776D`,
+        ]
+        let [c1, c2, c3] = [0, 0, 0];
+
+        ctx.font = "bold 40px Verdana";
+        ctx.globalAlpha = 0.7;
+
+        // console.log(colors.length)
+        function getColor(a, b) {
+            if (a - b >= 1) return a - 1;
+            if (a - b < b) return b + 1;
+            else return 0;
+        }
+
+        let fps, fpsInterval, startTime, now, then, elapsed;
+        fpsInterval = 1000 / 8;
+        then = Date.now();
+
+        function animate_text() {
+            now = Date.now();
+            elapsed = now - then;
+
+            if (elapsed > fpsInterval) {
+                then = now - (elapsed % fpsInterval);
+
+                c2 = getColor(c1, c2);
+                c3 = getColor(c2, c3);
+
+                ctx.clearRect(0, 0, width, height)
+                // ctx.globalCompositeOperation = 'destination-out';
+                // ctx.fillStyle = 'hsla(0, 0%, 0%, .3)';
+                // ctx.fillRect(0, 0, width, height);
+                // ctx.globalCompositeOperation = 'exclusion';
+
+                var gradient = ctx.createLinearGradient(0, 0, width, 0);
+                gradient.addColorStop("0", colors[c1]);
+                gradient.addColorStop("0.5", colors[c2]);
+                gradient.addColorStop("1", colors[c3]);
+
+                ctx.fillStyle = gradient;
+                ctx.fillText("Kairat Abylkasymov", 0, 36);
+
+                if (c1 >= 15) c1 = -1;
+                if (c2 >= 15) c2 = 0;
+                if (c3 >= 15) c3 = 0;
+                c1++;
+
+            }
+
+
+            requestAnimationFrame(animate_text);
+        };
+
+        animate_text();
+
+
+    }
 
     window.addEventListener('load', (e) => {
-        draw();
-    });
+        draw_software_engineer();
+        draw_lasers();
 
+        // display_name();
+    });
 </script>
 
 </html>

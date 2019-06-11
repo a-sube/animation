@@ -23,7 +23,6 @@ margin:0;
 padding:0;
 border:0;
 outline:0;
-
 }
 
 body {
@@ -101,11 +100,18 @@ vertical-align:middle;
 }
 
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0;}
-body{padding:16px;background: #000;}
+
+body{padding:0px;background: #000;}
+
+header {
+    position: relative;
+    width: 800px;
+    height: 300px;
+}
 
 #canvas-container {
     position: relative;
-    width: 300px;
+    width: 800px;
     height: 300px;
 }
 
@@ -118,11 +124,67 @@ body{padding:16px;background: #000;}
     border-radius: 50%;
 } */
 
-#demo {
+#images-canvas, #circle-canvas, 
+#sweng-canvas, #laser-canvas, #background-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: transparent;
+}
+
+#name-canvas {
     position: absolute;
     top: 0;
     left: 0;
 }
+
+#circle-canvas {
+    z-index: 1;
+}
+
+#wrapper {
+    width: 800px;
+    margin: auto;
+}
+
+main {
+    width: 100%;
+    height: calc(100vh - 300px);
+}
+
+#name-container {
+    position: absolute;
+    top: 100px;
+    left: 300px;
+    width: 0px;
+    height: 100px;
+    /* text-align: center; */
+    color: transparent;
+    opacity: 0;
+}
+
+#name-container.visible {
+    width: 500px;
+    opacity: 1;
+    transition: opacity 2750ms ease, width 50ms ease;
+}
+
+#name-container h1 {
+    /* padding: 10px; */
+    font-size: 40px;
+    font-family: Verdana, sans-serif;
+    /* background: -webkit-linear-gradient(0.90turn, 
+    #df6150, transparent, transparent, transparent); */
+    background: transparent;
+    /* -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; */
+    height: 100%;
+    z-index: 1;
+}
+
+
+
+
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {

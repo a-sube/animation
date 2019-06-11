@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- <canvas id="cirecles" width="300" height="400" style="background: black;">
+    </canvas> -->
+
+    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- <path d="M10 10 C 20 20, 40 20, 50 10" stroke="black" fill="transparent"/>
+        <path d="M70 10 C 70 20, 120 20, 120 10" stroke="black" fill="transparent"/>
+        <path d="M130 10 C 120 20, 180 20, 170 10" stroke="black" fill="transparent"/>
+        <path d="M10 60 C 20 80, 40 80, 50 60" stroke="black" fill="transparent"/>
+        <path d="M70 60 C 70 80, 110 80, 110 60" stroke="black" fill="transparent"/>
+        <path d="M130 60 C 120 80, 180 80, 170 60" stroke="black" fill="transparent"/>
+        <path d="M10 110 C 20 140, 40 140, 50 110" stroke="black" fill="transparent"/>
+        <path d="M70 110 C 70 140, 110 140, 110 110" stroke="black" fill="transparent"/>
+        <path d="M130 110 C 120 140, 180 140, 170 110" stroke="black" fill="transparent"/> -->
+
+        <!-- <circle cx="10" cy="10" r="2" fill="red"/>
+        <circle cx="90" cy="90" r="2" fill="red"/>
+        <circle cx="90" cy="10" r="2" fill="red"/>
+        <circle cx="10" cy="90" r="2" fill="red"/> -->
+
+        <!-- <path d="M10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80" stroke="black" fill="transparent"/>
+        <path d="M10 80 Q 95 10 180 80" stroke="black" fill="transparent"/> -->
+    </svg>
+
+</body>
+
+<script>
+
+    // M x y (or m dx dy) - MOVE TO 
+    // L x y (or l dx dy) - LINE TO
+    // H x (or h dx) - HORIZONTAL LINE
+    // V y (or v dy) - VERTICAL LINE
+    // Z (or z) - CLOSE PATH
+
+    // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy) - CUBIC CURVE
+    // S x2 y2, x y (or s dx2 dy2, dx dy) - produces the same type of curve
+
+    // Q x1 y1, x y (or q dx1 dy1, dx dy) - quadratic curve
+
+
+
+
+    function draw() {
+        let canvas = document.getElementById('cirecles'),
+            ctx = canvas.getContext('2d'),
+            w = canvas.width,
+            h = canvas.height;
+
+        let p = Math.PI;
+        // let PIXEL_RATIO = window.devicePixelRatio;
+        // console.log(PIXEL_RATIO)
+        // canvas.width = canvas.offsetWidth * PIXEL_RATIO;
+        // canvas.height = canvas.offsetHeight * PIXEL_RATIO;
+        // ctx.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
+
+        function animate() {
+
+            for (let i = 0; i < 10; i++) {
+
+            }
+            ctx.beginPath();
+            ctx.fillStyle = '#fff';
+            ctx.arc(50, 50, 5, 0, 2 * p, true);
+            ctx.fill();
+            ctx.closePath();
+
+        }
+
+        animate();
+    }
+
+
+    // function onResize() {
+    //     let canvas = this.base.querySelector('canvas');
+    //     let ctx = canvas.getContext('2d');
+    //     let PIXEL_RATIO = window.devicePixelRatio;
+
+    //     canvas.width = canvas.offsetWidth * PIXEL_RATIO;
+    //     canvas.height = canvas.offsetHeight * PIXEL_RATIO;
+    //     ctx.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
+
+    //     this.props.onDraw(ctx, canvas.offsetWidth, canvas.offsetHeight);
+    // }
+
+    // window.onload = draw;
+
+
+</script>
+
+</html>
